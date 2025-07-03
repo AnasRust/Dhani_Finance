@@ -70,11 +70,11 @@ def apply():
 @app.route('/admin')
 def admin():
     try:
-        applications = list(collection.find())
-        for application in applications:
+        apps = list(collection.find())
+        for application in apps:
             application['loan_amount_fmt'] = f"{int(application['loan_amount']):,}" if application.get("loan_amount") else "0"
             application['status'] = 'Approved'
-        return render_template("admin_dashboard.html", apps=applications)
+        return render_template("admin_dashboard.html", apps=apps)
     except Exception as e:
         return f"Admin Page Error: {str(e)}", 500
     
