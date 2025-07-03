@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request
+from urllib.parse import quote_plus
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import session
 from pymongo import MongoClient
 import datetime
-from pymongo import MongoClient
-from urllib.parse import quote_plus
 
 username = quote_plus("dhani_admin")
 password = quote_plus("Anascool@2001")  # use your actual password
@@ -14,10 +14,8 @@ db = client["Dhani_Finance"]
 collection = db["loan_applications"]
 
 
-
-
-
 app = Flask(__name__)
+app.secret_key = 'dhani_secret_2025' 
 
 # Homepage Route
 @app.route('/')
@@ -28,39 +26,45 @@ def home():
 @app.route('/apply', methods=['GET', 'POST'])
 def apply():
     if request.method == 'POST':
-        # Get form data
-        name = request.form['name']
-        mobile = request.form['mobile']
-        email = request.form['email']
-        loan_amount = request.form['loan_amount']
-        aadhaar = request.form['aadhaar']
-        pan = request.form['pan']
-        bank_account = request.form['bank_account']
-        ifsc = request.form['ifsc']
+        try:
+            name = request.form['name']
+            mobile = request.form['mobile']
+            email = request.form['email']
+            loan_amount = request.form['loan_amount']
+            aadhaar = request.form['aadhaar']
+            pan = request.form['pan']
+            bank_account = request.form['bank_account']
+            ifsc = request.form['ifsc']
 
-        # Mask Aadhaar and PAN
-        masked_aadhaar = mask_aadhaar(aadhaar)
-        masked_pan = mask_pan(pan)
+            # Mask Aadhaar and PAN
+            masked_aadhaar = mask_aadhaar(aadhaar)
+            masked_pan = mask_pan(pan)
 
-        # Create document
-        application = {
-            "name": name,
-            "mobile": mobile,
-            "email": email,
-            "loan_amount": loan_amount,
-            "aadhaar": masked_aadhaar,
-            "pan": masked_pan,
-            "bank_account": bank_account,
-            "ifsc": ifsc,
-            "submitted_at": datetime.datetime.now()
-        }
+            # Create document
+            application = {
+                "name": name,
+                "mobile": mobile,
+                "email": email,
+                "loan_amount": loan_amount,
+                "aadhaar": masked_aadhaar,
+                "pan": masked_pan,
+                "bank_account": bank_account,
+                "ifsc": ifsc,
+                "submitted_at": datetime.datetime.now()
+            }
 
-        # Insert into MongoDB
-        collection.insert_one(application)
+            # Insert into MongoDB
+            collection.insert_one(application)
 
-        return render_template("success.html", name=name)
-    
+            flash("🎉 Application submitted successfully!", "success")
+            return redirect(url_for('success'))
+
+        except Exception as e:
+            flash("❌ Error: " + str(e), "danger")
+            return redirect(url_for('apply'))
+
     return render_template("apply.html")
+
 
 # Admin Dashboard Route
 @app.route('/admin')
@@ -73,6 +77,11 @@ def admin():
         return render_template("admin_dashboard.html", apps=apps)
     except Exception as e:
         return f"Admin Page Error: {str(e)}", 500
+    
+
+@app.route('/success')
+def success():
+    return render_template("success.html")
 
 
 
