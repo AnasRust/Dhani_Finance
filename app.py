@@ -3,19 +3,17 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask import session
 from pymongo import MongoClient
 import datetime
+from urllib.parse import quote_plus
+
 
 username = quote_plus("dhani_admin")
-password = quote_plus("Anascool@2001")  # use your actual password
+password = quote_plus("Anascool@2001")  # Replace with your real password
+uri = f"mongodb+srv://{username}:{password}@finance.1osnvho.mongodb.net/?retryWrites=true&w=majority&tls=true&appName=Finance"
 
-uri = f"mongodb+srv://{username}:{password}@finance.1osnvho.mongodb.net/?retryWrites=true&w=majority&appName=Finance"
 client = MongoClient(uri)
-
 db = client["Dhani_Finance"]
 collection = db["loan_applications"]
 
-
-app = Flask(__name__)
-app.secret_key = 'dhani_secret_2025' 
 
 # Homepage Route
 @app.route('/')
