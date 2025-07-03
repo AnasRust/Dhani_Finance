@@ -1,19 +1,19 @@
 from flask import Flask, render_template, request
 from pymongo import MongoClient
 import datetime
-import os
-client = MongoClient(os.environ.get("MONGO_URI"))
+from pymongo import MongoClient
 from urllib.parse import quote_plus
 
 username = quote_plus("dhani_admin")
-password = quote_plus("Anascool@2001")
+password = quote_plus("Anascool@2001")  # use your actual password
 
-uri = f"mongodb+srv://{username}:{password}@cluster0.mongodb.net/Dhani_Finance?retryWrites=true&w=majority"
+uri = f"mongodb+srv://{username}:{password}@finance.1osnvho.mongodb.net/?retryWrites=true&w=majority&appName=Finance"
 client = MongoClient(uri)
+
 db = client["Dhani_Finance"]
 collection = db["loan_applications"]
-uri = os.environ.get("MONGO_URI")
-client = MongoClient("mongodb://...")
+
+
 
 
 
@@ -67,6 +67,9 @@ def apply():
 def admin():
     try:
         apps = list(collection.find())
+        for app in apps:
+            app['loan_amount_fmt'] = f"{int(app['loan_amount']):,}" if app.get("loan_amount") else "0"
+            app['status'] = 'Approved'  # Placeholder; update if needed
         return render_template("admin_dashboard.html", apps=apps)
     except Exception as e:
         return f"Admin Page Error: {str(e)}", 500

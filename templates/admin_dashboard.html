@@ -171,21 +171,18 @@
         </tr>
       </thead>
       <tbody>
-        {% for app in apps %}
         <tr>
           <td>{{ app.name }}</td>
           <td>{{ app.mobile }}</td>
           <td>{{ app.email }}</td>
           <td>{{ app.aadhaar }}</td>
           <td>{{ app.pan }}</td>
-          <td>₹{{ app.loan_amount_fmt }}</td>
+          <td>{{ app.loan_amount_fmt }}</td>
           <td>
-            {% set status = app.get('status', 'Pending') %}
-            <span class="badge {{ status|lower }}">{{ status }}</span>
+          <span class="badge {{ app.status|lower }}">{{ app.status }}</span>
           </td>
           <td>{{ app.submitted_at.strftime('%d-%b-%Y %I:%M %p') if app.submitted_at }}</td>
         </tr>
-        {% endfor %}
       </tbody>
     </table>
 
