@@ -48,7 +48,6 @@
 <div class="form-container">
   <h2 class="text-center mb-4">Loan Application Form</h2>
   <form action="/apply" method="post">
-
     <div class="row g-3">
       <div class="col-md-6">
         <input type="text" name="name" class="form-control" placeholder="Full Name" required>
@@ -69,4 +68,24 @@
         <input type="text" name="pan" class="form-control" placeholder="PAN Number" required>
       </div>
       <div class="col-md-6">
-        <input type="text" name="
+        <input type="text" name="bank_account" class="form-control" placeholder="Bank Account Number" required>
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="ifsc" class="form-control" placeholder="IFSC Code" required>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary px-5 py-2">Submit Application</button>
+    </div>
+  </form>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  &copy; 2025 Dhani Finance Ltd. All rights reserved.
+</div>
+
+</body>
+</html>
