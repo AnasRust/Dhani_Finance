@@ -1,13 +1,23 @@
 from flask import Flask, render_template, request
 from pymongo import MongoClient
 import datetime
+import os
+client = MongoClient(os.environ.get("MONGO_URI"))
+from urllib.parse import quote_plus
 
-app = Flask(__name__)
+username = quote_plus("dhani_admin")
+password = quote_plus("Anascool@2001")
 
-# Connect to MongoDB
-client = MongoClient("mongodb://localhost:27017/")
+uri = f"mongodb+srv://{username}:{password}@cluster0.mongodb.net/Dhani_Finance?retryWrites=true&w=majority"
+client = MongoClient(uri)
 db = client["Dhani_Finance"]
 collection = db["loan_applications"]
+uri = os.environ.get("MONGO_URI")
+client = MongoClient("mongodb://...")
+
+
+
+app = Flask(__name__)
 
 # Homepage Route
 @app.route('/')
@@ -55,20 +65,12 @@ def apply():
 # Admin Dashboard Route
 @app.route('/admin')
 def admin():
-    apps = list(collection.find())
+    try:
+        apps = list(collection.find())
+        return render_template("admin_dashboard.html", apps=apps)
+    except Exception as e:
+        return f"Admin Page Error: {str(e)}", 500
 
-    # Format loan_amounts in Python and add a status badge
-    for app in apps:
-        try:
-            amt = int(app.get('loan_amount', 0))
-            app['loan_amount_fmt'] = f"{amt:,}"
-        except:
-            app['loan_amount_fmt'] = "N/A"
-
-        # Add dummy status for now
-        app['status'] = "Approved"  # or use logic later
-
-    return render_template("admin_dashboard.html", apps=apps)
 
 
 # Nav bar Route's
