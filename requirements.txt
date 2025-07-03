@@ -1,5 +1,5 @@
-=======
+
 Flask==2.2.5
 pymongo
 gunicorn
->>>>>>> ed37a40 (Fix: added gunicorn to correctly named requirements.txt)
+ ed37a40 (Fix: added gunicorn to correctly named requirements.txt)
