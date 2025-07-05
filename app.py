@@ -1,18 +1,25 @@
 from urllib.parse import quote_plus
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask import session
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from pymongo import MongoClient
 import datetime
-from urllib.parse import quote_plus
+from reportlab.pdfgen import canvas
+from flask import make_response
+import io
 
 
+# Initialize Flask app before using it
+app = Flask(__name__)
+app.secret_key = 'supersecret'  # Needed for flash messages and sessions
+
+# MongoDB Atlas connection
 username = quote_plus("dhani_admin")
-password = quote_plus("Anascool@2001")  # Replace with your real password
+password = quote_plus("Anascool@2001")  # Replace with your actual password
 uri = f"mongodb+srv://{username}:{password}@finance.1osnvho.mongodb.net/?retryWrites=true&w=majority&tls=true&appName=Finance"
 
 client = MongoClient(uri)
 db = client["Dhani_Finance"]
 collection = db["loan_applications"]
+
 
 
 # Homepage Route
@@ -25,6 +32,7 @@ def home():
 def apply():
     if request.method == 'POST':
         try:
+            import os  # <-- ensure imported
             name = request.form['name']
             mobile = request.form['mobile']
             email = request.form['email']
@@ -54,14 +62,49 @@ def apply():
             # Insert into MongoDB
             collection.insert_one(application)
 
-            flash("🎉 Application submitted successfully!", "success")
-            return redirect(url_for('success'))
+            # ==== PDF GENERATION ====
+            from reportlab.pdfgen import canvas
+            pdf_dir = os.path.join("static", "pdfs")
+            os.makedirs(pdf_dir, exist_ok=True)  # create directory if not exists
+
+            filename = f"{name.replace(' ', '_')}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.pdf"
+            pdf_path = os.path.join(pdf_dir, filename)
+
+            c = canvas.Canvas(pdf_path)
+            c.setFont("Helvetica-Bold", 16)
+            c.drawString(180, 800, "DhrmaFinance Ltd")
+            c.setFont("Helvetica", 12)
+            c.drawString(100, 770, "Loan Application Acknowledgment")
+
+            c.setFont("Helvetica", 10)
+            c.drawString(50, 730, f"Name: {name}")
+            c.drawString(50, 710, f"Email: {email}")
+            c.drawString(50, 690, f"Mobile: {mobile}")
+            c.drawString(50, 670, f"Aadhaar: {masked_aadhaar}")
+            c.drawString(50, 650, f"PAN: {masked_pan}")
+            c.drawString(50, 630, f"Bank Account: {bank_account}")
+            c.drawString(50, 610, f"IFSC: {ifsc}")
+            c.drawString(50, 590, f"Loan Amount: ₹{loan_amount}")
+
+            c.setFont("Helvetica-Oblique", 10)
+            c.drawString(50, 550, "This document acknowledges your submission of details to DhrmaFinance Ltd.")
+            c.drawString(50, 535, "We hereby confirm no objection to processing your application with the above data.")
+            c.drawString(50, 520, "For any queries, contact support@dhrmafinanceltd.co.in")
+
+            c.setFont("Helvetica", 8)
+            c.drawString(50, 480, "Generated on: " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            c.save()
+
+            # ✅ Redirect to /success with filename
+            return redirect(url_for('success', filename=filename))
 
         except Exception as e:
             flash("❌ Error: " + str(e), "danger")
             return redirect(url_for('apply'))
 
     return render_template("apply.html")
+
+
 
 
 # Admin Dashboard Route
@@ -79,7 +122,9 @@ def admin():
 
 @app.route('/success')
 def success():
-    return render_template("success.html")
+    filename = request.args.get('filename')
+    return render_template("success.html", filename=filename)
+
 
 
 
