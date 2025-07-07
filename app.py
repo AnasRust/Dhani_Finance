@@ -6,21 +6,16 @@ from reportlab.pdfgen import canvas
 from flask import make_response
 import io
 
-
-# Initialize Flask app before using it
 app = Flask(__name__)
 app.secret_key = 'supersecret'  # Needed for flash messages and sessions
 
 # MongoDB Atlas connection
 username = quote_plus("dhani_admin")
-password = quote_plus("Anascool@2001")  # Replace with your actual password
+password = quote_plus("Anascool@2001")
 uri = f"mongodb+srv://{username}:{password}@finance.1osnvho.mongodb.net/?retryWrites=true&w=majority&tls=true&appName=Finance"
-
 client = MongoClient(uri)
 db = client["Dhani_Finance"]
 collection = db["loan_applications"]
-
-
 
 # Homepage Route
 @app.route('/')
@@ -32,7 +27,7 @@ def home():
 def apply():
     if request.method == 'POST':
         try:
-            import os  # <-- ensure imported
+            import os
             name = request.form['name']
             mobile = request.form['mobile']
             email = request.form['email']
@@ -42,11 +37,9 @@ def apply():
             bank_account = request.form['bank_account']
             ifsc = request.form['ifsc']
 
-            # Mask Aadhaar and PAN
             masked_aadhaar = mask_aadhaar(aadhaar)
             masked_pan = mask_pan(pan)
 
-            # Create document
             application = {
                 "name": name,
                 "mobile": mobile,
@@ -59,13 +52,12 @@ def apply():
                 "submitted_at": datetime.datetime.now()
             }
 
-            # Insert into MongoDB
             collection.insert_one(application)
 
-            # ==== PDF GENERATION ====
+            # PDF generation
             from reportlab.pdfgen import canvas
             pdf_dir = os.path.join("static", "pdfs")
-            os.makedirs(pdf_dir, exist_ok=True)  # create directory if not exists
+            os.makedirs(pdf_dir, exist_ok=True)
 
             filename = f"{name.replace(' ', '_')}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.pdf"
             pdf_path = os.path.join(pdf_dir, filename)
@@ -95,7 +87,6 @@ def apply():
             c.drawString(50, 480, "Generated on: " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             c.save()
 
-            # ✅ Redirect to /success with filename
             return redirect(url_for('success', filename=filename))
 
         except Exception as e:
@@ -104,40 +95,15 @@ def apply():
 
     return render_template("apply.html")
 
-
-
-
-# Admin Dashboard Route
-@app.route('/admin')
-def admin():
-    try:
-        apps = list(collection.find())
-        for application in apps:
-            application['loan_amount_fmt'] = f"{int(application['loan_amount']):,}" if application.get("loan_amount") else "0"
-            application['status'] = 'Approved'
-        return render_template("admin_dashboard.html", apps=apps)
-    except Exception as e:
-        return f"Admin Page Error: {str(e)}", 500
-    
-
 @app.route('/success')
 def success():
     filename = request.args.get('filename')
     return render_template("success.html", filename=filename)
 
-
-
-
-# Nav bar Route's
-@app.route('/our-story')
-def our_story():
-    return render_template('our_story.html')
-
 @app.route('/loan/car')
 def loan_car():
     latest = collection.find().sort("submitted_at", -1).limit(1)
     return render_template('loan_car.html', recent=latest)
-
 
 @app.route('/loan/home')
 def loan_home():
@@ -145,18 +111,9 @@ def loan_home():
     return render_template('loan_home.html', recent=latest)
 
 @app.route('/loan/personal')
-def loan_personal():  # ✅ Unique function name
+def loan_personal():
     latest = collection.find().sort("submitted_at", -1).limit(1)
     return render_template('loan_personal.html', recent=latest)
-
-@app.route('/calculator')
-def calculator():
-    return render_template('calculator.html')
-
-@app.route('/resources')
-def resources():
-    return render_template('resources.html')
-
 
 # Aadhaar Masking
 def mask_aadhaar(aadhaar):
@@ -165,6 +122,19 @@ def mask_aadhaar(aadhaar):
 # PAN Masking
 def mask_pan(pan):
     return "XXXXX" + pan[-5:]
+
+# ✅ New Page Routes
+@app.route('/loan')
+def loan():
+    return render_template("loan.html")
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
 
 # Run Flask App
 if __name__ == '__main__':
