@@ -35,6 +35,14 @@
       text-decoration: none;
       font-weight: 500;
     }
+    .navbar .apply-btn {
+      background: #28a745;
+      padding: 6px 14px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
     .banner {
       background: url("{{ url_for('static', filename='images/home_loan_banner.jpg') }}") center/cover no-repeat;
@@ -106,6 +114,46 @@
       font-size: 0.9rem;
       color: #333;
     }
+
+    .testimonials {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+    }
+
+    .testimonial-item {
+      min-width: 250px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .whatsapp-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 50px;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      text-decoration: none;
+      z-index: 999;
+    }
+
+    .apply-now-btn {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #004AAD;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
@@ -114,8 +162,8 @@
     <h2>Dhani Finance</h2>
     <ul>
       <li><a href="/">Home</a></li>
-      <li><a href="/apply">Apply</a></li>
       <li><a href="/calculator">Calculator</a></li>
+      <li><a class="apply-btn" href="/apply">Apply Now</a></li>
     </ul>
   </div>
 
@@ -142,6 +190,9 @@
       <li>Attractive Interest Rates</li>
       <li>Easy Online Application Process</li>
     </ul>
+
+    <!-- ✅ Apply Now Button -->
+    <a href="/apply" class="apply-now-btn">Apply Now</a>
   </div>
 
   <div class="section calculator">
@@ -154,6 +205,38 @@
     <input type="number" id="tenure" placeholder="e.g. 240">
     <button onclick="calculateEMI()">Calculate EMI</button>
     <p id="emiResult"></p>
+  </div>
+
+  <div class="section">
+    <h2>Sponsored Ad</h2>
+    <div style="background:#fff; border:1px solid #ccc; padding:15px; text-align:center; border-radius:8px;">
+      <img src="{{ url_for('static', filename='images/ad_banner.jpg') }}" alt="Ad Banner" style="max-width:100%;">
+      <p style="font-size:0.9rem; color:#666;">Your dream home is closer than you think – Check new offers today!</p>
+    </div>
+  </div>
+
+  <div class="section" style="background:#ffffff; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+    <h2>Quick Loan Eligibility Checklist</h2>
+    <ul>
+      <li>✅ Age between 23 to 60 years</li>
+      <li>✅ Stable income (salaried or self-employed)</li>
+      <li>✅ Credit score above 650</li>
+      <li>✅ Valid property documents</li>
+    </ul>
+  </div>
+
+  <div class="section" style="background:#f0f9ff; border-radius:10px;">
+    <h2>What Our Customers Say</h2>
+    <div class="testimonials">
+      <div class="testimonial-item">
+        <p>"The loan process was super fast and easy. Highly recommend Dhani!"</p>
+        <strong>- Priya Sharma, Pune</strong>
+      </div>
+      <div class="testimonial-item">
+        <p>"Got the best rate in the market. Great experience overall."</p>
+        <strong>- Ramesh Verma, Delhi</strong>
+      </div>
+    </div>
   </div>
 
   <div class="section faq">
@@ -176,6 +259,8 @@
     © 2025 Dhani Finance Ltd. All rights reserved.
   </div>
 
+  <a href="https://wa.me/919999999999" target="_blank" class="whatsapp-button">💬 WhatsApp Help</a>
+
   <script>
     function calculateEMI() {
       const principal = parseFloat(document.getElementById("amount").value);
@@ -185,7 +270,7 @@
       const monthlyRate = annualRate / 12;
       const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) /
                   (Math.pow(1 + monthlyRate, tenureMonths) - 1);
-      
+
       document.getElementById("emiResult").innerText =
         "Estimated EMI: ₹" + emi.toFixed(2) + " per month";
     }

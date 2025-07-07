@@ -2,151 +2,179 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Loan Calculator - Dhani Finance</title>
+  <title>EMI Calculator - Dhani Finance</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
+      background: #f9f9f9;
       margin: 0;
       padding: 0;
-      background: #f7f9fc;
     }
-    .navbar {
-      background-color: #004AAD;
-      padding: 15px 30px;
+    header {
+      background-color: #0076CE;
       color: white;
+      text-align: center;
+      padding: 30px;
+    }
+    section {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #0076CE;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .calculator {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      flex-wrap: wrap;
     }
-    .navbar h2 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-    .navbar ul {
-      display: flex;
-      list-style: none;
-      gap: 20px;
-      margin: 0;
-    }
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .hero {
-      background: linear-gradient(to right, #0076CE, #00B4DB);
-      color: white;
-      text-align: center;
-      padding: 60px 20px;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: auto;
-    }
-
-    .section {
-      padding: 40px 20px;
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-top: -30px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .calculator input {
-      padding: 10px;
-      margin: 8px 0;
-      width: 100%;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .calculator button {
-      background: #0076CE;
-      color: white;
-      padding: 12px;
-      width: 100%;
-      border: none;
-      border-radius: 6px;
-      margin-top: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    #emiResult {
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: #004AAD;
-      margin-top: 10px;
-    }
-
-    .footer {
-      background: #eee;
-      text-align: center;
+    .chart-area, .input-area {
+      flex: 1;
+      min-width: 300px;
       padding: 20px;
-      font-size: 0.9rem;
-      color: #333;
-      margin-top: 50px;
+    }
+    .chart-area {
+      text-align: center;
+    }
+    label {
+      font-weight: 600;
+    }
+    input[type=range], input[type=number] {
+      width: 100%;
+      padding: 6px;
+      margin-top: 6px;
+      margin-bottom: 20px;
+    }
+    input[type=number] {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .results {
+      margin-top: 20px;
+      font-size: 1rem;
+    }
+    .results span {
+      font-weight: 600;
+    }
+    button {
+      padding: 12px 24px;
+      background-color: #0076CE;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
 
-  <div class="navbar">
-    <h2>Dhani Finance</h2>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/apply">Apply</a></li>
-      <li><a href="/resources">Resources</a></li>
-    </ul>
+<header>
+  <h1>Dhani Finance - EMI Calculator</h1>
+</header>
+
+<section>
+  <h2>Determine Your Dhani Personal Loan EMI Online</h2>
+
+  <div class="calculator">
+    <!-- Donut Chart -->
+    <div class="chart-area">
+      <canvas id="emiChart" width="200" height="200"></canvas>
+      <div class="results">
+        <p>EMI per Month: ₹<span id="emiValue">0</span></p>
+        <p>Principal: ₹<span id="principalValue">0</span></p>
+        <p>Interest: ₹<span id="interestValue">0</span></p>
+        <p>Total Payable: ₹<span id="totalValue">0</span></p>
+      </div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="input-area">
+      <label for="loanAmount">Loan Amount (₹):</label>
+      <input type="range" id="loanAmount" min="10000" max="2500000" step="10000" value="50000" oninput="updateEMI()">
+      <input type="number" id="loanAmountInput" value="50000" oninput="syncSlider('loanAmount')">
+
+      <label for="loanDuration">Loan Duration (Years):</label>
+      <input type="range" id="loanDuration" min="1" max="5" value="1" oninput="updateEMI()">
+      <input type="number" id="loanDurationInput" value="1" oninput="syncSlider('loanDuration')">
+
+      <label for="interestRate">Interest Rate (% p.a.):</label>
+      <input type="range" id="interestRate" min="5" max="30" step="0.5" value="10" oninput="updateEMI()">
+      <input type="number" id="interestRateInput" value="10" oninput="syncSlider('interestRate')">
+
+      <button onclick="updateEMI()">Check Your Offer Now</button>
+    </div>
   </div>
+</section>
 
-  <div class="hero">
-    <h1>Unlock Your Dream with Dhani Loans</h1>
-    <p>Enjoy interest rates starting from just <strong>9.5% per annum</strong>! Use our simple calculator to estimate your monthly EMIs.</p>
-  </div>
+<script>
+  let emiChart;
 
-  <div class="section calculator">
-    <h2>Loan EMI Calculator</h2>
-    <label>Loan Amount (₹):</label>
-    <input type="number" id="amount" placeholder="e.g. 300000">
-    <label>Interest Rate (% per annum):</label>
-    <input type="number" id="rate" placeholder="e.g. 9.5">
-    <label>Loan Tenure (in months):</label>
-    <input type="number" id="tenure" placeholder="e.g. 60">
-    <button onclick="calculateEMI()">Calculate EMI</button>
-    <p id="emiResult"></p>
-  </div>
+  function syncSlider(id) {
+    document.getElementById(id).value = document.getElementById(id + "Input").value;
+    updateEMI();
+  }
 
-  <div class="footer">
-    © 2025 Dhani Finance Ltd. Lowest interest rates | Quick disbursal | Trusted by 1M+ customers
-  </div>
+  function calculateEMI(P, r, n) {
+    r = r / (12 * 100);
+    n = n * 12;
+    return (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+  }
 
-  <script>
-    function calculateEMI() {
-      const principal = parseFloat(document.getElementById("amount").value);
-      const annualRate = parseFloat(document.getElementById("rate").value) / 100;
-      const tenureMonths = parseInt(document.getElementById("tenure").value);
+  function updateEMI() {
+    let loan = parseFloat(document.getElementById("loanAmount").value);
+    let years = parseInt(document.getElementById("loanDuration").value);
+    let rate = parseFloat(document.getElementById("interestRate").value);
 
-      const monthlyRate = annualRate / 12;
-      const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) /
-                  (Math.pow(1 + monthlyRate, tenureMonths) - 1);
-      
-      document.getElementById("emiResult").innerText =
-        "Estimated EMI: ₹" + emi.toFixed(2) + " per month";
-    }
-  </script>
+    // Sync number inputs
+    document.getElementById("loanAmountInput").value = loan;
+    document.getElementById("loanDurationInput").value = years;
+    document.getElementById("interestRateInput").value = rate;
+
+    let emi = calculateEMI(loan, rate, years);
+    let total = emi * years * 12;
+    let interest = total - loan;
+
+    // Update Text
+    document.getElementById("emiValue").innerText = emi.toFixed(0);
+    document.getElementById("principalValue").innerText = loan.toFixed(0);
+    document.getElementById("interestValue").innerText = interest.toFixed(0);
+    document.getElementById("totalValue").innerText = total.toFixed(0);
+
+    // Update Chart
+    const ctx = document.getElementById("emiChart").getContext("2d");
+    if (emiChart) emiChart.destroy();
+
+    emiChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ["Principal", "Interest"],
+        datasets: [{
+          data: [loan, interest],
+          backgroundColor: ["#00B894", "#FFD166"],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutout: '70%',
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", updateEMI);
+</script>
 
 </body>
 </html>

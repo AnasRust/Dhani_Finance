@@ -1,0 +1,101 @@
+[33mcommit 29ef0d04f62c014173af79ecdb0b4968746c758f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Mon Jul 7 12:15:46 2025 +0530
+
+    Initial commit with Flask finance app
+
+[33mcommit 37a3063e51b45fee9b5b609381e3307eb8393536[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Sun Jul 6 04:57:05 2025 +0530
+
+    Initail commit
+
+[33mcommit 42ad315fd4caf7f59a3aa7806d9f0edb2b067817[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 19:38:59 2025 +0530
+
+    Fix: updated UI
+
+[33mcommit eff08470ed1d3c8e236b456e82f9dbab475ce1fb[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 18:59:52 2025 +0530
+
+    Fix: added secret key for flash messages
+
+[33mcommit 19a73cfda40f3db2ccb7d96cfd7e4958232dd5d7[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 18:49:45 2025 +0530
+
+    Fix: added secret key for flash messages
+
+[33mcommit ae5ff4b20e52357adbeae210245a5771cfa19f44[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 18:24:02 2025 +0530
+
+    Fix: added secret key for flash messages
+
+[33mcommit c24b87a846ea28946035622e019c4fb1763f832f[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 18:18:21 2025 +0530
+
+    Fix: Added submit button to apply form
+
+[33mcommit a21f57a045847aa303960e808c804fdbbae00bf0[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 17:56:19 2025 +0530
+
+    Fix: Added submit button to apply form
+
+[33mcommit 3203e097746cc03377ea76ce39cb36f804d33c56[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 17:49:39 2025 +0530
+
+    ✅ Fixed MongoDB URI and removed duplicate client line
+
+[33mcommit 28ff2ac5be73013b8b99fdb1775649ea6b8ad72e[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 17:31:56 2025 +0530
+
+    Fix: Updated MongoDB Atlas connection URI
+
+[33mcommit 4d0b5ea6eecaabda5f8ab1988d3b88550ca19360[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 16:52:47 2025 +0530
+
+    Fixed merge conflict in requirements.txt
+
+[33mcommit a4b6d09e70da3a3ed1a8f0b186f45cb4083a9bcd[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 16:51:59 2025 +0530
+
+    Fixed merge conflict in requirements.txt
+
+[33mcommit 9680108f8ca9e18230e21c06c2c909d020076ca6[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 16:51:04 2025 +0530
+
+    Fixed merge conflict in requirements.txt
+
+[33mcommit 9dbb9969472679730e9c1dd1185468d221a2dbca[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 16:32:05 2025 +0530
+
+    Fix: added gunicorn to correctly named requirements.txt
+
+[33mcommit 83f0bff65611fd9de6fd7c96861f5049878b9814[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 16:13:03 2025 +0530
+
+    Update and rename requirements.txt.txt to requirements.txt
+
+[33mcommit 1a9df8d069aaf145fb858311bcd3c1d219e7776c[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 16:12:09 2025 +0530
+
+    Rename requirment.txt.txt to requirements.txt
+
+[33mcommit 6e9ac70bfbfc8c98c3fc521a1be3cd64d58dc090[m
+Author: AnasRust <anasrust7@gmail.com>
+Date:   Thu Jul 3 15:56:29 2025 +0530
+
+    Initial commit

@@ -1,336 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dhani Finance - Instant Personal Loan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-<style>
-    body {
-    font-family: 'Poppins', sans-serif;
-  }
-    /* NAVBAR */
-    .navbar {
-      background-color: #004AAD;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .navbar h2 {
-      font-size: 1.4rem;
-      margin: 0;
-    }
-    .navbar ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      margin: 0;
-    }
-    .navbar li {
-      position: relative;
-    }
-    .navbar a {
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: background 0.2s;
-    }
-    .navbar a:hover {
-      background-color: rgba(255, 255, 255, 0.15);
-    }
-
-    /* Dropdown container with animation */
-.dropdown-content {
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-  background-color: #fff;
-  min-width: 180px;
-  top: 100%;
-  left: 0;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  z-index: 1000;
-  padding: 8px 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translateY(-10px);
-}
-
-/* Dropdown item links */
-.dropdown-content a {
-  display: block;
-  padding: 10px 16px;
-  color: #004AAD;
-  text-decoration: none;
-  white-space: nowrap;
-  font-size: 15px;
-  font-weight: 500;
-}
-
-/* Hover effect for links */
-.dropdown-content a:hover {
-  background-color: #f0f0f0;
-}
-
-/* Show dropdown on hover with animation */
-.dropdown:hover .dropdown-content {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-
-
-    /* HEADER */
-    header {
-      background: linear-gradient(90deg, #004AAD, #0076CE);
-      color: white;
-      text-align: center;
-      padding: 60px 20px;
-    }
-    header h1 {
-      font-size: 2.5rem;
-    }
-    header p {
-      margin-top: 10px;
-      font-size: 1rem;
-    }
-    .apply-btn {
-      background-color: white;
-      color: #0076CE;
-      font-weight: 600;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      margin-top: 25px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    /* IMAGE BANNER */
-    .banner-img {
-      width: 100%;
-      height: auto;
-      max-height: 320px;
-      object-fit: contain;
-      display: block;
-      margin: 20px auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    /* FEATURES */
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
-      margin: 40px auto;
-      max-width: 1100px;
-      padding: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 30px;
-      width: 300px;
-      text-align: center;
-    }
-
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 30px;
-      font-size: 0.9rem;
-      background-color: #f1f1f1;
-    }
-
-    /* CHAT */
-    .chat-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background-color: #0076CE;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 28px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 2rem;
-      }
-      .features {
-        flex-direction: column;
-        align-items: center;
-      }
-      .navbar ul {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Dhrma Finance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f4f8fb;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .hero {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .counter {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        footer {
+            background-color: #003366;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- ✅ Navbar -->
-<div class="navbar">
-  <h2>Dhani Finance</h2>
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/our-story">Our Story</a></li>
-    <li class="dropdown">
-  <a href="#">Loans ▾</a>
-  <div class="dropdown-content">
-    <a href="/loan/car">Car Loan</a>
-    <a href="/loan/home">Home Loan</a>
-    <a href="/loan/personal">Personal Loan</a>
-  </div>
-</li>
+<!-- ✅ Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Dhrma Finance</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="/loan">Loans</a></li>
+    <!-- About removed as requested -->
+    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+</ul>
 
-    <li><a href="/calculator">Calculator</a></li>
-    <li><a href="/resources">Resources</a></li>
-    <li><a href="/apply">Apply</a></li>
-    <li><a href="/admin">Admin</a></li>
-  </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ✅ Hero Banner -->
+<div class="hero" data-aos="zoom-in">
+    <h1 class="display-4">Fast, Secure & Reliable Loans</h1>
+    <p class="lead">Get up to ₹15 Lakhs instantly with flexible EMIs and minimal documentation</p>
+    <a href="#" class="btn btn-light btn-lg mt-3">Check Your Eligibility</a>
 </div>
 
-
-
-  <!-- ✅ Hero Section -->
-  <header>
-    <h1>Apply for Dhani Personal Loan</h1>
-    <p>No paperwork, quick approval, 100% online process</p>
-    <a href="/apply"><button class="apply-btn">Apply Now</button></a>
-  </header>
-
-  <!-- ✅ Dashboard & Banner Side-by-Side -->
-<section style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 40px auto; max-width: 1100px; flex-wrap: wrap;">
-  <!-- Chart Section -->
-  <div style="flex: 1; min-width: 300px;">
-    <canvas id="loanChart" width="400" height="300"></canvas>
-  </div>
-
-  <!-- Banner Image Section -->
-  <div style="flex: 1; min-width: 300px;">
-    <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Loan Banner" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-  </div>
-</section>
-
-
-
-  <!-- ✅ Feature Highlights -->
-  <section class="features">
-    <div class="card">
-      <h3>Instant Approval</h3>
-      <p>Get approval in minutes with zero paperwork.</p>
+<!-- ✅ Features Section -->
+<div class="container my-5">
+    <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up">
+            <div class="card feature-card text-center p-4">
+                <h3>🏦 Easy Personal Loans</h3>
+                <p>Apply online anytime with quick processing.</p>
+            </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="card feature-card text-center p-4">
+                <h3>⏱️ 5-Minute Disbursal</h3>
+                <p>Money in your account within minutes of approval.</p>
+            </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="card feature-card text-center p-4">
+                <h3>🔒 100% Safe</h3>
+                <p>We use bank-grade encryption to keep your data secure.</p>
+            </div>
+        </div>
     </div>
-    <div class="card">
-      <h3>Low Interest Rates</h3>
-      <p>Attractive interest starting from 11.99% p.a.</p>
+</div>
+
+<!-- ✅ Dummy Business Stats -->
+<div class="bg-white py-5" data-aos="fade-up">
+    <div class="container text-center">
+        <h2 class="mb-4">Our Impact</h2>
+        <div class="row">
+            <div class="col-md-4"><div class="counter">10,000+</div><p>Loans Disbursed</p></div>
+            <div class="col-md-4"><div class="counter">8,000+</div><p>Happy Customers</p></div>
+            <div class="col-md-4"><div class="counter">20+</div><p>Cities Covered</p></div>
+        </div>
     </div>
-    <div class="card">
-      <h3>100% Online Process</h3>
-      <p>Apply from your phone, no branch visit needed.</p>
+</div>
+
+<!-- ✅ Testimonials Section -->
+<div class="container my-5" data-aos="fade-up">
+    <h2 class="text-center mb-4">What Our Users Say</h2>
+    <div class="card mx-auto text-center p-4" style="max-width: 600px;">
+        <p>"I got my personal loan in just 10 minutes. Great service and amazing support!"</p>
+        <strong>- Rajesh Kumar, Bangalore</strong>
     </div>
-  </section>
+</div>
 
-  <!-- ✅ Footer -->
-  <footer>
-    © 2025 Dhani Finance Ltd. All rights reserved.
-  </footer>
+<!-- ✅ Footer -->
+<footer>
+    <p>Dhrma Finance © 2025 | All Rights Reserved</p>
+    <p>Need Help? <a href="#" class="text-white text-decoration-underline">Contact Support</a></p>
+</footer>
 
-  <!-- ✅ Chat Button -->
-  <button class="chat-btn">💬</button>
-  <script>
-  // Animate Counter
-  function animateValue(id, end, duration) {
-    let start = 0;
-    let obj = document.getElementById(id);
-    let range = end - start;
-    let stepTime = Math.abs(Math.floor(duration / range));
-    let timer = setInterval(() => {
-      start++;
-      obj.innerText = start;
-      if (start === end) clearInterval(timer);
-    }, stepTime);
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    animateValue("applicationsCount", 312, 1500);
-    animateValue("approvedCount", 248, 1500);
-  });
-  </script>
-
-  // Chart.js
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- ✅ Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const canvas = document.getElementById('loanChart');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ['Approved', 'Pending', 'Rejected'],
-        datasets: [{
-          label: 'Loan Status',
-          data: [65, 20, 15],
-          backgroundColor: [
-            '#0076CE',  // Approved
-            '#FFBB00',  // Pending
-            '#FF4D4D'   // Rejected
-          ],
-          borderColor: '#fff',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              font: {
-                family: 'Poppins',
-                size: 14
-              },
-              color: '#333'
-            }
-          },
-          tooltip: {
-            backgroundColor: '#004AAD',
-            titleColor: '#fff',
-            bodyColor: '#fff'
-          }
-        }
-      }
-    });
-  });
+    AOS.init();
 </script>
-
-
-
-
 </body>
 </html>
