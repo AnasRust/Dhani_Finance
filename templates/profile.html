@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile & Acknowledgement</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        p {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            animation: fadeIn 1s ease-in;
+        }
+
+        li {
+            background: rgba(255,255,255,0.2);
+            margin: 10px 0;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            padding: 12px 0;
+            background: #ff416c;
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>✅ Application Received</h2>
+        <p>Your loan application has been submitted successfully. Here are your details:</p>
+
+        <ul>
+            <li><strong>Full Name:</strong> {{ user.name }}</li>
+            <li><strong>Mobile Number:</strong> {{ user.mobile }}</li>
+            <li><strong>Email:</strong> {{ user.email }}</li>
+            <li><strong>Loan Amount:</strong> ₹ {{ user.loan_amount }}</li>
+            <li><strong>Aadhaar Number:</strong> {{ user.aadhaar }}</li>
+            <li><strong>PAN Number:</strong> {{ user.pan }}</li>
+            <li><strong>Bank Account:</strong> XXXXXX{{ user.bank_account[-4:] }}</li>
+            <li><strong>IFSC Code:</strong> {{ user.ifsc }}</li>
+        </ul>
+
+        <a href="{{ url_for('home') }}" class="btn-primary">Back to Home</a>
+    </div>
+</body>
+</html>
