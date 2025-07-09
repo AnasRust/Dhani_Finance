@@ -2,12 +2,9 @@ from urllib.parse import quote_plus
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from pymongo import MongoClient
 import datetime
-from reportlab.pdfgen import canvas
-from flask import make_response
-import io
 
 app = Flask(__name__)
-app.secret_key = 'supersecret'  # Needed for flash messages and sessions
+app.secret_key = 'supersecret'
 
 # MongoDB Atlas connection
 username = quote_plus("dhani_admin")
@@ -17,17 +14,23 @@ client = MongoClient(uri)
 db = client["Dhani_Finance"]
 collection = db["loan_applications"]
 
-# Homepage Route
+# Helper functions
+def mask_aadhaar(aadhaar):
+    return "XXXX-XXXX-" + aadhaar[-4:] if aadhaar else "XXXX-XXXX-0000"
+
+def mask_pan(pan):
+    return "XXXXX" + pan[-5:] if pan else "XXXXX0000"
+
+# Home Page
 @app.route('/')
 def home():
     return render_template("index.html")
 
-# Loan Application Route
+# Apply Loan Page
 @app.route('/apply', methods=['GET', 'POST'])
 def apply():
     if request.method == 'POST':
         try:
-            import os
             name = request.form['name']
             mobile = request.form['mobile']
             email = request.form['email']
@@ -53,53 +56,23 @@ def apply():
             }
 
             collection.insert_one(application)
+            session['user_email'] = email
 
-            # PDF generation
-            from reportlab.pdfgen import canvas
-            pdf_dir = os.path.join("static", "pdfs")
-            os.makedirs(pdf_dir, exist_ok=True)
-
-            filename = f"{name.replace(' ', '_')}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.pdf"
-            pdf_path = os.path.join(pdf_dir, filename)
-
-            c = canvas.Canvas(pdf_path)
-            c.setFont("Helvetica-Bold", 16)
-            c.drawString(180, 800, "DhrmaFinance Ltd")
-            c.setFont("Helvetica", 12)
-            c.drawString(100, 770, "Loan Application Acknowledgment")
-
-            c.setFont("Helvetica", 10)
-            c.drawString(50, 730, f"Name: {name}")
-            c.drawString(50, 710, f"Email: {email}")
-            c.drawString(50, 690, f"Mobile: {mobile}")
-            c.drawString(50, 670, f"Aadhaar: {masked_aadhaar}")
-            c.drawString(50, 650, f"PAN: {masked_pan}")
-            c.drawString(50, 630, f"Bank Account: {bank_account}")
-            c.drawString(50, 610, f"IFSC: {ifsc}")
-            c.drawString(50, 590, f"Loan Amount: ₹{loan_amount}")
-
-            c.setFont("Helvetica-Oblique", 10)
-            c.drawString(50, 550, "This document acknowledges your submission of details to DhrmaFinance Ltd.")
-            c.drawString(50, 535, "We hereby confirm no objection to processing your application with the above data.")
-            c.drawString(50, 520, "For any queries, contact support@dhrmafinanceltd.co.in")
-
-            c.setFont("Helvetica", 8)
-            c.drawString(50, 480, "Generated on: " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-            c.save()
-
-            return redirect(url_for('success', filename=filename))
+            return redirect(url_for('profile'))
 
         except Exception as e:
-            flash("❌ Error: " + str(e), "danger")
+            flash(f"❌ Error: {str(e)}", "danger")
             return redirect(url_for('apply'))
 
     return render_template("apply.html")
 
-@app.route('/success')
-def success():
-    filename = request.args.get('filename')
-    return render_template("success.html", filename=filename)
 
+# Thank You Page
+@app.route('/thank-you')
+def thank_you():
+    return render_template('thank_you.html')
+
+# Loan Category Pages
 @app.route('/loan/car')
 def loan_car():
     latest = collection.find().sort("submitted_at", -1).limit(1)
@@ -115,15 +88,6 @@ def loan_personal():
     latest = collection.find().sort("submitted_at", -1).limit(1)
     return render_template('loan_personal.html', recent=latest)
 
-# Aadhaar Masking
-def mask_aadhaar(aadhaar):
-    return "XXXX-XXXX-" + aadhaar[-4:]
-
-# PAN Masking
-def mask_pan(pan):
-    return "XXXXX" + pan[-5:]
-
-# ✅ New Page Routes
 @app.route('/loan')
 def loan():
     return render_template("loan.html")
@@ -132,10 +96,77 @@ def loan():
 def about():
     return render_template("about.html")
 
-@app.route('/contact')
-def contact():
-    return render_template("contact.html")
+# Next Page (Glitch + Profile + Withdraw)
+@app.route('/next')
+def next_page():
+    user_email = session.get('user_email')
 
-# Run Flask App
+    if not user_email:
+        flash("Please submit an application first.", "warning")
+        return redirect(url_for('apply'))
+
+    user = collection.find_one({'email': user_email})
+
+    user_data = {
+        'user_name': user.get('name', 'John D.'),
+        'aadhaar': user.get('aadhaar', 'XXXX-XXXX-1234'),
+        'bank_account': 'XXXXXX' + user.get('bank_account', '')[-4:],
+        'mobile': '*****' + user.get('mobile', '')[-4:]
+    } if user else {
+        'user_name': 'John D.',
+        'aadhaar': 'XXXX-XXXX-1234',
+        'bank_account': 'XXXXXX0000',
+        'mobile': '*****0000'
+    }
+
+    return render_template("next.html", user_data=user_data)
+
+
+# Withdraw Page
+@app.route('/withdraw')
+def withdraw():
+    user_email = session.get('user_email')
+
+    if user_email:
+        user = collection.find_one({"email": user_email}, sort=[("submitted_at", -1)])
+        if user:
+            return render_template('withdraw.html',
+                                   user_name=user.get('name', 'John D.'),
+                                   masked_aadhaar=user.get('aadhaar', 'XXXX-XXXX-1234'),
+                                   masked_account='XXXXXX' + user.get('bank_account', '')[-4:],
+                                   masked_mobile='*****' + user.get('mobile', '')[-4:])
+        else:
+            flash("User data not found.", "danger")
+            return redirect(url_for('apply'))
+
+    flash("Please submit an application first.", "warning")
+    return redirect(url_for('apply'))
+
+# Profile Page (Shows submitted user details)
+@app.route('/profile')
+def profile():
+    user_email = session.get('user_email')
+
+    if not user_email:
+        flash("Please submit your loan application first.", "warning")
+        return redirect(url_for('apply'))
+
+    user = collection.find_one({'email': user_email})
+
+    if not user:
+        flash("User data not found.", "danger")
+        return redirect(url_for('apply'))
+
+    return render_template('profile.html', user=user)
+
+# Customer Care Page
+@app.route('/customer-care')
+def customer_care():
+    return render_template('customer_care_page.html')
+
+
+
+# Run the App
 if __name__ == '__main__':
     app.run(debug=True)
+# updated for GitHub push
