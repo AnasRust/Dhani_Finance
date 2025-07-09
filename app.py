@@ -167,8 +167,8 @@ def customer_care():
 
 
 # Run the App
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+    #app.run(debug=True)
 
 # Only used if running manually (not with Gunicorn)
 if __name__ == '__main__':
