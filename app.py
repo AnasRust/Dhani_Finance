@@ -169,4 +169,8 @@ def customer_care():
 # Run the App
 if __name__ == '__main__':
     app.run(debug=True)
-# updated for GitHub push
+
+# Only used if running manually (not with Gunicorn)
+if __name__ == '__main__':
+    from werkzeug.serving import run_simple
+    run_simple('127.0.0.1', 5000, app)
