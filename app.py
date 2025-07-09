@@ -67,11 +67,6 @@ def apply():
     return render_template("apply.html")
 
 
-# Thank You Page
-@app.route('/thank-you')
-def thank_you():
-    return render_template('thank_you.html')
-
 # Loan Category Pages
 @app.route('/loan/car')
 def loan_car():
@@ -167,8 +162,8 @@ def customer_care():
 
 
 # Run the App
-#if __name__ == '__main__':
-    #app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 # Only used if running manually (not with Gunicorn)
 if __name__ == '__main__':
