@@ -2,127 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Withdraw Funds - Dhani Finance</title>
+  <title>Withdraw Your Funds - Dhani Finance</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js"></script>
 
   <style>
     body {
-      background-color: #f3f6fb;
-      font-family: 'Lato', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: #eef4ff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
-    .withdraw-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start; /* Push content towards top */
-      padding-top: 40px; /* Add spacing from top */
-    }
-
-    .withdraw-section {
+    .title-section {
       text-align: center;
-      margin-bottom: 20px;
+      padding: 60px 20px 30px;
     }
 
-    .withdraw-section h1 {
-      color: #094c9d;
-      font-size: 36px;
-      margin-top: 10px;
-      margin-bottom: 10px;
+    .title-section h2 {
+      color: #004085;
+      font-weight: 700;
+      font-size: 32px;
     }
 
-    .masked-box {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      max-width: 500px;
-      width: 90%;
-      text-align: left;
+    .title-section p {
+      color: #555;
       font-size: 15px;
-      border-left: 5px solid #094c9d;
       margin-bottom: 20px;
     }
 
-    .action-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
+    .card-box {
+      background: #ffffff;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-animated {
-      background-color: #094c9d;
+    .card-box p {
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .btn-transfer {
+      display: block;
+      width: 200px;
+      margin: 15px auto;
+      background-color: #28a745;
       color: white;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 25px;
       border: none;
-      padding: 12px 25px;
-      border-radius: 50px;
-      font-weight: bold;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
     }
 
-    .btn-animated:hover {
-      background-color: #072f6b;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    .btn-transfer:hover {
+      background-color: #218838;
+    }
+
+    .placeholder-box {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #f7faff;
+      border-left: 4px solid #007bff;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #333;
     }
 
     .footer {
       background-color: #094c9d;
       color: white;
-      padding: 10px 0;
+      padding: 15px 0;
+      margin-top: 60px;
       text-align: center;
-      font-size: 13px;
+      font-size: 14px;
     }
   </style>
 </head>
-
 <body>
 
-  <div class="withdraw-container">
-    <div class="withdraw-section">
-      <div id="withdrawLottie" style="height: 150px;"></div>
-      <h1>Withdraw Your Funds</h1>
-      <p class="text-muted">Please find your masked details below.</p>
-    </div>
-
-    <div class="masked-box">
-      <p><strong>User Name:</strong> {{ user_name or 'John D.' }}</p>
-      <p><strong>Masked Aadhaar:</strong> {{ masked_aadhaar or 'XXXX-XXXX-1234' }}</p>
-      <p><strong>Masked Bank Account:</strong> {{ masked_account or 'XXXXXX4532' }}</p>
-      <hr>
-      <p>"Transfer Funds in your Bank Account"</p>
-      <p><strong>Masked Mobile:</strong> {{ masked_mobile or '*****6789' }}</p>
-    </div>
-
-    <div class="action-buttons">
-      <a href="/" class="btn btn-animated">Home</a>
-      <a href="/apply" class="btn btn-animated">Profile</a>
-      <a href="/contact" class="btn btn-animated">Customer Support</a>
-    </div>
+  <!-- Title Section -->
+  <div class="title-section">
+    <h2>Withdraw Your Funds</h2>
+    <p>Please find your masked details below.</p>
   </div>
 
+  <!-- Masked Info Section -->
+  <div class="card-box">
+    <p><strong>User Name:</strong> {{ user_data.user_name }}</p>
+    <p><strong>Masked Aadhaar:</strong> {{ user_data.aadhaar }}</p>
+    <p><strong>Masked Bank Account:</strong> {{ user_data.bank_account }}</p>
+
+    <!-- Transfer Funds Button -->
+    <a href="/transfer" class="btn-transfer">Transfer Funds</a>
+
+    <p><strong>Masked Mobile:</strong> {{ user_data.mobile }}</p>
+  </div>
+
+  <!-- Placeholder Block -->
+  <div class="placeholder-box">
+    <em>Additional information block (4–5 lines) will appear here once finalized.</em>
+  </div>
+
+  <!-- Footer -->
   <div class="footer">
     &copy; 2025 Dhani Finance Ltd. All rights reserved.
   </div>
-
-  <script>
-    lottie.loadAnimation({
-      container: document.getElementById('withdrawLottie'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'https://lottie.host/b229e0fa-1fc2-4fd7-8c9a-b2bb7aee52ab/tgW5EdrgVn.json'
-    });
-  </script>
 
 </body>
 </html>
