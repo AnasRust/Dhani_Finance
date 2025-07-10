@@ -137,6 +137,18 @@ def withdraw():
     flash("Please submit an application first.", "warning")
     return redirect(url_for('apply'))
 
+@app.route('/transfer', methods=['GET', 'POST'])
+def transfer():
+    if request.method == 'POST':
+        account_no = request.form['accountNo']
+        ifsc = request.form['ifsc']
+        amount = request.form['amount']
+        # TODO: Add logic to store transaction / verify / respond
+        flash(f'₹{amount} is scheduled to be transferred to {account_no} ({ifsc})', 'success')
+        return redirect('/transfer')
+    return render_template('transfer.html')
+
+
 # Profile Page (Shows submitted user details)
 @app.route('/profile')
 def profile():
