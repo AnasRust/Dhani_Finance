@@ -172,6 +172,45 @@ def customer_care():
     return render_template('customer_care_page.html')
 
 
+# User Login Page using existing loan_applications data
+@app.route('/userlogin', methods=['GET', 'POST'])
+def user_login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']  # Mobile number
+
+        user = collection.find_one({'name': username, 'mobile': password})
+
+        if user:
+            session['logged_user_name'] = user['name']
+            session['logged_user_mobile'] = user['mobile']
+            flash("✅ Login successful!", "success")
+            return redirect(url_for('user_dashboard'))
+        else:
+            flash("❌ Invalid name or mobile number.", "danger")
+            return redirect(url_for('user_login'))
+
+    return render_template('user_login.html')
+
+
+@app.route('/user-dashboard')
+def user_dashboard():
+    if 'logged_user_name' not in session:
+        flash("Please login first!", "warning")
+        return redirect(url_for('user_login'))
+
+    user = collection.find_one({
+        'name': session['logged_user_name'],
+        'mobile': session['logged_user_mobile']
+    })
+
+    if not user:
+        flash("❌ User data not found.", "danger")
+        return redirect(url_for('user_login'))
+
+    return render_template('user_dashboard.html', user=user)
+
+
 
 # Run the App
 if __name__ == '__main__':

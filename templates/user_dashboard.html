@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Dashboard - Dhani Finance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f4f8fb;
+      padding-top: 50px;
+    }
+    .dashboard-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    }
+    .info-label {
+      font-weight: 600;
+      color: #333;
+    }
+    .info-value {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="dashboard-card mx-auto col-md-8">
+      <h3 class="mb-4 text-center text-primary">👋 Welcome, {{ user.name }}</h3>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <p><span class="info-label">Email:</span> <span class="info-value">{{ user.email }}</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><span class="info-label">Mobile:</span> <span class="info-value">{{ user.mobile }}</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><span class="info-label">Loan Amount:</span> <span class="info-value">₹{{ user.loan_amount }}</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><span class="info-label">Aadhaar:</span> <span class="info-value">{{ user.aadhaar }}</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><span class="info-label">PAN:</span> <span class="info-value">{{ user.pan }}</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><span class="info-label">Bank A/C:</span> <span class="info-value">{{ user.bank_account }}</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><span class="info-label">IFSC:</span> <span class="info-value">{{ user.ifsc }}</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><span class="info-label">Submitted:</span> <span class="info-value">{{ user.submitted_at.strftime('%d-%b-%Y %I:%M %p') }}</span></p>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="/" class="btn btn-outline-primary">← Back to Home</a>
+        <div class="text-center">
+    <button class="btn-withdraw" onclick="window.location.href='/withdraw'">Withdraw Funds</button>
+    </div>
+    </div>
+  </div>
+</body>
+</html>
+
