@@ -108,6 +108,16 @@
             <div class="col-md-6"><input name="mobile" class="form-control" placeholder="Mobile Number" required></div>
             <div class="col-md-6"><input type="email" name="email" class="form-control" placeholder="Email Address" required></div>
             <div class="col-md-6"><input type="number" name="loan_amount" class="form-control" placeholder="Loan Amount (₹)" required></div>
+            <div class="col-md-6">
+            <select name="emi_tenure" class="form-select" required>
+            <option value="" disabled selected>Select EMI Tenure (Months)</option>
+            <option value="3">3 Months</option>
+            <option value="6">6 Months</option>
+            <option value="9">9 Months</option>
+            <option value="12">12 Months</option>
+            <option value="24">24 Months</option>
+  </select>
+</div>
             <div class="col-md-6"><input name="aadhaar" class="form-control" placeholder="Aadhaar Number" required></div>
             <div class="col-md-6"><input name="pan" class="form-control" placeholder="PAN Number" required></div>
             <div class="col-md-6"><input name="bank_account" class="form-control" placeholder="Bank Account Number" required></div>
@@ -164,17 +174,19 @@
   document.getElementById('loanForm').addEventListener('submit', function(e) {
     e.preventDefault();
     fetch(this.action, { method: 'POST', body: new FormData(this) })
-      .then(r => { if (r.redirected) {
-        Swal.fire({
-          title: '🎉 Application Submitted!',
-          text: 'Thank you for applying...',
-          icon: 'success',
-          showCancelButton: true,
-          confirmButtonText: '➡️ Next',
-          cancelButtonText: '🏠 Home',
-          allowOutsideClick: false
-        }).then(res => res.isConfirmed ? window.location='/next' : window.location='/');
-      }})
+      .then(r => {
+        if (r.redirected) {
+          Swal.fire({
+            title: '🎉 Application Submitted!',
+            text: 'Thank you for applying...',
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonText: '➡️ Next',
+            cancelButtonText: '🏠 Home',
+            allowOutsideClick: false
+          }).then(res => res.isConfirmed ? window.location='/profile' : window.location='/');
+        }
+      })
       .catch(() => Swal.fire('Error', 'Something went wrong.', 'error'));
   });
 </script>

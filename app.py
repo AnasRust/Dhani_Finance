@@ -29,6 +29,7 @@ def home():
 # Apply Loan Page
 @app.route('/apply', methods=['GET', 'POST'])
 def apply():
+    
     if request.method == 'POST':
         try:
             name = request.form['name']
@@ -39,6 +40,7 @@ def apply():
             pan = request.form['pan']
             bank_account = request.form['bank_account']
             ifsc = request.form['ifsc']
+            emi_tenure = int(request.form['emi_tenure'])
 
             masked_aadhaar = mask_aadhaar(aadhaar)
             masked_pan = mask_pan(pan)
@@ -52,6 +54,7 @@ def apply():
                 "pan": masked_pan,
                 "bank_account": bank_account,
                 "ifsc": ifsc,
+                "emi_tenure": emi_tenure,
                 "submitted_at": datetime.datetime.now()
             }
 
@@ -137,21 +140,12 @@ def withdraw():
     flash("Please submit an application first.", "warning")
     return redirect(url_for('apply'))
 
-@app.route('/transfer', methods=['GET', 'POST'])
-def transfer():
-    if request.method == 'POST':
-        account_no = request.form['accountNo']
-        ifsc = request.form['ifsc']
-        amount = request.form['amount']
-        # TODO: Add logic to store transaction / verify / respond
-        flash(f'₹{amount} is scheduled to be transferred to {account_no} ({ifsc})', 'success')
-        return redirect('/transfer')
-    return render_template('transfer.html')
 
 
 # Profile Page (Shows submitted user details)
 @app.route('/profile')
 def profile():
+    
     user_email = session.get('user_email')
 
     if not user_email:
@@ -164,7 +158,32 @@ def profile():
         flash("User data not found.", "danger")
         return redirect(url_for('apply'))
 
+    # ✅ EMI and interest calculation
+    try:
+        loan_amount = float(user.get('loan_amount', 0))
+        emi_months = int(user.get('emi_tenure', 0))  # make sure this field is saved
+        annual_interest = 5.99  # percent
+
+        monthly_interest = annual_interest / (12 * 100)
+
+        if emi_months > 0:
+            emi = (loan_amount * monthly_interest * pow(1 + monthly_interest, emi_months)) / \
+                  (pow(1 + monthly_interest, emi_months) - 1)
+            total_payment = emi * emi_months
+            total_interest = total_payment - loan_amount
+        else:
+            emi = total_payment = total_interest = 0
+
+        user['monthly_emi'] = round(emi, 2)
+        user['total_payment'] = round(total_payment, 2)
+        user['total_interest'] = round(total_interest, 2)
+    except Exception as e:
+        print("EMI calculation error:", e)
+        user['monthly_emi'] = user['total_payment'] = user['total_interest'] = 0
+        
     return render_template('profile.html', user=user)
+
+
 
 # Customer Care Page
 @app.route('/customer-care')
