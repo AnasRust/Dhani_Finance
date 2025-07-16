@@ -6,6 +6,12 @@ import datetime
 app = Flask(__name__)
 app.secret_key = 'supersecret'
 
+def calculate_emi(principal, annual_rate, years):
+    rate = (annual_rate / 12) / 100
+    months = years * 12
+    emi = (principal * rate * ((1 + rate) ** months)) / (((1 + rate) ** months) - 1)
+    return round(emi)
+
 # MongoDB Atlas connection
 username = quote_plus("dhani_admin")
 password = quote_plus("Anascool@2001")
@@ -29,18 +35,27 @@ def home():
 # Apply Loan Page
 @app.route('/apply', methods=['GET', 'POST'])
 def apply():
-    
     if request.method == 'POST':
         try:
             name = request.form['name']
             mobile = request.form['mobile']
             email = request.form['email']
-            loan_amount = request.form['loan_amount']
+            loan_amount = float(request.form['loan_amount'])  # convert to float
             aadhaar = request.form['aadhaar']
             pan = request.form['pan']
             bank_account = request.form['bank_account']
             ifsc = request.form['ifsc']
-            emi_tenure = int(request.form['emi_tenure'])
+            emi_tenure = int(request.form['emi_tenure'])  # in years
+
+            # --- Calculate EMI ---
+            def calculate_emi(principal, annual_rate, years):
+                rate = (annual_rate / 12) / 100
+                months = years * 12
+                emi = (principal * rate * ((1 + rate) ** months)) / (((1 + rate) ** months) - 1)
+                return round(emi)
+
+            annual_interest_rate = 5.99  # you can change this
+            emi_amount = calculate_emi(loan_amount, annual_interest_rate, emi_tenure)
 
             masked_aadhaar = mask_aadhaar(aadhaar)
             masked_pan = mask_pan(pan)
@@ -55,6 +70,7 @@ def apply():
                 "bank_account": bank_account,
                 "ifsc": ifsc,
                 "emi_tenure": emi_tenure,
+                "emi_amount": emi_amount,
                 "submitted_at": datetime.datetime.now()
             }
 
@@ -68,6 +84,7 @@ def apply():
             return redirect(url_for('apply'))
 
     return render_template("apply.html")
+
 
 
 # Loan Category Pages
@@ -120,7 +137,7 @@ def next_page():
     return render_template("next.html", user_data=user_data)
 
 
-# Withdraw Page
+# Withdraw Page 
 @app.route('/withdraw')
 def withdraw():
     user_email = session.get('user_email')
@@ -128,11 +145,32 @@ def withdraw():
     if user_email:
         user = collection.find_one({"email": user_email}, sort=[("submitted_at", -1)])
         if user:
+            name = user.get('name', 'Customer')
+
+            # ✅ Ensure values are numeric (convert from str if needed)
+            try:
+                loan_amount = float(user.get('loan_amount', 100000))
+            except (ValueError, TypeError):
+                loan_amount = 100000.0
+
+            try:
+                emi_amount = float(user.get('emi_amount', 4250))
+            except (ValueError, TypeError):
+                emi_amount = 4250.0
+
+            try:
+                duration = int(user.get('emi_tenure', 2))  # assuming correct field is 'emi_tenure'
+            except (ValueError, TypeError):
+                duration = 2
+
             return render_template('withdraw.html',
-                                   user_name=user.get('name', 'John D.'),
+                                   user_name=name,
                                    masked_aadhaar=user.get('aadhaar', 'XXXX-XXXX-1234'),
                                    masked_account='XXXXXX' + user.get('bank_account', '')[-4:],
-                                   masked_mobile='*****' + user.get('mobile', '')[-4:])
+                                   masked_mobile='*****' + user.get('mobile', '')[-4:],
+                                   loan_amount=loan_amount,
+                                   emi_amount=emi_amount,
+                                   duration=duration)
         else:
             flash("User data not found.", "danger")
             return redirect(url_for('apply'))
