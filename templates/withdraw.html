@@ -114,11 +114,16 @@
 
     <div class="reminder-box" style="margin-top: 20px; padding: 15px; background-color: #fffbe6; border-left: 5px solid #f5a623; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto;">
   <p style="font-size: 16px; color: #333;">
-    <strong>({{ user_name }})</strong>, this is a payment reminder from your loan amount  
-    <strong>₹{{ "{:,.0f}".format(loan_amount) }}</strong> by Dhani Finance. <br><br>
-    Your installment of <strong>₹{{ "{:,.0f}".format(emi_amount) }}</strong> is due to insurance fees. <br>
-    Please contact your agent if you have issues.
-  </p>
+  <strong>({{ user_name }})</strong>, this is a payment reminder from your loan amount  
+  <strong>₹{{ "{:,.0f}".format(loan_amount) }}</strong> by Dhani Finance. <br><br>
+
+  Your installment: <strong>₹{{ "{:,.0f}".format(emi_amount) }}</strong><br>
+  Insurance Fee: <strong>₹{{ "{:,.0f}".format(insurance_fee) }}</strong> 
+  <small style="color:#888;">(minimum ₹3,250 or 1.25% of loan)</small><br><br>
+
+  Please contact your agent if you have issues. 
+</p>
+
 </div>
 
     

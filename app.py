@@ -153,7 +153,6 @@ def next_page():
     return render_template("next.html", user_data=user_data)
 
 
-# Withdraw Page 
 @app.route('/withdraw')
 def withdraw():
     user_email = session.get('user_email')
@@ -163,7 +162,7 @@ def withdraw():
         if user:
             name = user.get('name', 'Customer')
 
-            # ✅ Ensure values are numeric (convert from str if needed)
+            # ✅ Ensure values are numeric
             try:
                 loan_amount = float(user.get('loan_amount', 100000))
             except (ValueError, TypeError):
@@ -175,9 +174,12 @@ def withdraw():
                 emi_amount = 4250.0
 
             try:
-                duration = int(user.get('emi_tenure', 2))  # assuming correct field is 'emi_tenure'
+                duration = int(user.get('emi_tenure', 2))
             except (ValueError, TypeError):
                 duration = 2
+
+            # ✅ Calculate insurance fee (minimum ₹3,250 or 1.25% of loan amount)
+            insurance_fee = max(3250, round(0.0125 * loan_amount))
 
             return render_template('withdraw.html',
                                    user_name=name,
@@ -186,6 +188,7 @@ def withdraw():
                                    masked_mobile='*****' + user.get('mobile', '')[-4:],
                                    loan_amount=loan_amount,
                                    emi_amount=emi_amount,
+                                   insurance_fee=insurance_fee,
                                    duration=duration)
         else:
             flash("User data not found.", "danger")
@@ -193,6 +196,7 @@ def withdraw():
 
     flash("Please submit an application first.", "warning")
     return redirect(url_for('apply'))
+
 
 
 
