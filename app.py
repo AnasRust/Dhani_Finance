@@ -6,11 +6,7 @@ import datetime
 app = Flask(__name__)
 app.secret_key = 'supersecret'
 
-def calculate_emi(principal, annual_rate, years):
-    rate = (annual_rate / 12) / 100
-    months = years * 12
-    emi = (principal * rate * ((1 + rate) ** months)) / (((1 + rate) ** months) - 1)
-    return round(emi)
+
 
 # MongoDB Atlas connection
 username = quote_plus("dhani_admin")
@@ -31,6 +27,21 @@ def mask_pan(pan):
 @app.route('/')
 def home():
     return render_template("index.html")
+
+def calculate_emi(principal, annual_rate, years):
+    rate = (annual_rate / 12) / 100
+    months = years * 12
+    emi = (principal * rate * ((1 + rate) ** months)) / (((1 + rate) ** months) - 1)
+    return round(emi)
+
+def calculate_insurance_fee(loan_amount):
+    base_fee = 3250
+    if loan_amount <= 100000:
+        return base_fee
+    else:
+        extra_amount = loan_amount - 100000
+        additional_fee = extra_amount * 0.02  # 2% on amount above ₹1L
+        return round(base_fee + additional_fee, 2)
 
 # Apply Loan Page
 @app.route('/apply', methods=['GET', 'POST'])
@@ -54,8 +65,11 @@ def apply():
                 emi = (principal * rate * ((1 + rate) ** months)) / (((1 + rate) ** months) - 1)
                 return round(emi)
 
-            annual_interest_rate = 5.99  # you can change this
+            annual_interest_rate = 5.99  # can be dynamic later
             emi_amount = calculate_emi(loan_amount, annual_interest_rate, emi_tenure)
+
+            # --- Calculate Insurance Fee ---
+            insurance_fee = calculate_insurance_fee(loan_amount)
 
             masked_aadhaar = mask_aadhaar(aadhaar)
             masked_pan = mask_pan(pan)
@@ -65,6 +79,7 @@ def apply():
                 "mobile": mobile,
                 "email": email,
                 "loan_amount": loan_amount,
+                "insurance_fee": insurance_fee,
                 "aadhaar": masked_aadhaar,
                 "pan": masked_pan,
                 "bank_account": bank_account,
@@ -84,6 +99,7 @@ def apply():
             return redirect(url_for('apply'))
 
     return render_template("apply.html")
+
 
 
 
